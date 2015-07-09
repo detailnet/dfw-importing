@@ -1,0 +1,58 @@
+{
+    "name": "detailnet/dfw-importing",
+    "description": "DETAIL Framework library for data importing from various sources",
+    "type": "library",
+    "keywords": [
+        "dfw",
+        "detailnet",
+        "import"
+    ],
+    "homepage": "https://github.com/detailnet/dfw-importing/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Wolf",
+            "email": "ivan.wolf@detailnet.ch"
+        },
+        {
+            "name": "Curzio Della Santa",
+            "email": "curzio.della.santa@detailnet.ch"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.6",
+        "squizlabs/php_codesniffer" : "~2.3",
+        "phpmd/phpmd": "~2.2",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Detail\\Importing\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "DetailTest\\Importing\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "!vendor",
+            "tests",
+            "*phpunit.xml",
+            ".coveralls.yml",
+            ".travis.yml",
+            "build.xml",
+            "build.properties",
+            "composer.phar"
+        ]
+    }
+}
