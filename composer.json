@@ -26,7 +26,11 @@
         "phpunit/phpunit": "~4.6",
         "squizlabs/php_codesniffer" : "~2.3",
         "phpmd/phpmd": "~2.2",
-        "satooshi/php-coveralls": "dev-master"
+        "satooshi/php-coveralls": "dev-master",
+        "doctrine/dbal": "~2.4"
+    },
+    "suggest": {
+        "doctrine/dbal": "For usage of the Doctrine DBAL based source"
     },
     "autoload": {
         "psr-0": {
