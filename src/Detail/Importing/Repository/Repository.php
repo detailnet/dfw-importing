@@ -3,21 +3,33 @@
 namespace Detail\Importing\Repository;
 
 use Detail\Importing\Source;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
+use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
 
 class Repository implements
-    RepositoryInterface
+    RepositoryInterface,
+    NormalizerAwareInterface
 {
+    use NormalizerAwareTrait;
+
     /**
      * @var Source\SourceInterface
      */
     protected $source;
 
     /**
-     * @param Source\SourceInterface $source
+     * @var object
      */
-    public function __construct(Source\SourceInterface $source)
+    protected $dtoEntityName;
+
+    /**
+     * @param Source\SourceInterface $source
+     * @param string $dtoEntityName DTO entity full class name
+     */
+    public function __construct(Source\SourceInterface $source, $dtoEntityName)
     {
         $this->source = $source;
+        $this->dtoEntityName = $dtoEntityName;
     }
 
     /**
@@ -27,11 +39,7 @@ class Repository implements
     {
         $rows = $this->getSource()->fetchAll();
 
-        /** @todo Hydrate/normalize $rows to DTOs */
-        // $this->getNormalizer()->normalize(Denner\Importing\DTO\NavisionText::CLASS, $rows);
-        $records = array();
-
-        return $records;
+        return $this->denormalizeRows($rows);
     }
 
     /**
@@ -40,5 +48,19 @@ class Repository implements
     protected function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * @param array $rows
+     * @return array
+     */
+    protected function denormalizeRows(array $rows)
+    {
+        // array_walk($rows, $this->getNormalizer()->denormalize, $this->dtoEntityName);
+        foreach ($rows as &$row) {
+            $row = $this->getNormalizer()->denormalize($row, $this->dtoEntityName);
+        }
+
+        return $rows;
     }
 }
