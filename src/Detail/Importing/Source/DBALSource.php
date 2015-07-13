@@ -12,11 +12,19 @@ abstract class DBALSource extends BaseSource
     protected $connection;
 
     /**
-     * @param DBALDriver\Connection $connection
+     * @var string
      */
-    public function __construct(DBALDriver\Connection $connection)
+    protected $dbName;
+
+
+    /**
+     * @param DBALDriver\Connection $connection
+     * @param string $dbName
+     */
+    public function __construct(DBALDriver\Connection $connection, $dbName)
     {
         $this->connection = $connection;
+        $this->dbName = $dbName;
     }
 
     /**
@@ -34,11 +42,6 @@ abstract class DBALSource extends BaseSource
     {
         return $this->connection;
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getSelectString();
 
     /**
      * @param array $criteria
@@ -59,48 +62,24 @@ abstract class DBALSource extends BaseSource
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+
     /**
      * @param array $criteria
      * @return DBALDriver\Statement
      */
-    protected function createSelectQuery(
+    abstract protected function createSelectQuery(
 //        $fields = "*",
         array $criteria = array()
 //        array $orderBy = null,
 //        $limit = null,
 //        $offset = null
-    ) {
-        /** @todo Very rudimentary for the moment, refactor to get entityAliases, use constants for operators ... */
+    );
 
-        $where = '';
-
-        foreach ($criteria as $condition) {
-            $part = '';
-
-            switch ($condition['operator']) {
-                case 'IN':
-                    $part .= sprintf(
-                        "%s IN (%s)",
-                        $condition['field'],
-                        is_array($condition['value']) ? implode(', ', $condition['value']) : $condition['value']
-                    );
-                    break;
-                default:
-                    // do nothing;
-            }
-
-            if ($part !== '') {
-                $where .= ($where === '') ? "WHERE" : "AND";
-                $where .= " (" . $part . ")";
-            }
-        }
-
-        return $this->getConnection()->prepare(
-            sprintf(
-                "%s %s",
-                $this->getSelectString(),
-                $where
-            )
-        );
+    /**
+     * @return string
+     */
+    protected function getDbName()
+    {
+        return $this->dbName;
     }
 }
