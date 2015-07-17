@@ -2,29 +2,22 @@
 
 namespace Detail\Importing\Source;
 
-use Doctrine\DBAL\Driver as DBALDriver;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 abstract class DBALSource extends BaseSource
 {
     /**
-     * @var DBALDriver\Connection $connection
+     * @var Connection $connection
      */
     protected $connection;
 
     /**
-     * @var string
+     * @param Connection $connection
      */
-    protected $dbName;
-
-
-    /**
-     * @param DBALDriver\Connection $connection
-     * @param string $dbName
-     */
-    public function __construct(DBALDriver\Connection $connection, $dbName)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->dbName = $dbName;
     }
 
     /**
@@ -36,7 +29,7 @@ abstract class DBALSource extends BaseSource
     }
 
     /**
-     * @return DBALDriver\Connection
+     * @return Connection
      */
     protected function getConnection()
     {
@@ -52,34 +45,77 @@ abstract class DBALSource extends BaseSource
 //        array $orderBy = null,
 //        $limit = null,
 //        $offset = null
-    ) {
-        $statement = $this->createSelectQuery($criteria);
+    )
+    {
+        $query = $this->createSelectQuery($criteria);
 
-        if (!$statement->execute()) {
-            return array();
-        };
+        // var_dump((string) $query);
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 
     /**
      * @param array $criteria
-     * @return DBALDriver\Statement
+     * @return QueryBuilder
      */
-    abstract protected function createSelectQuery(
-//        $fields = "*",
+    protected function createSelectQuery(
+//        $query = null,
         array $criteria = array()
 //        array $orderBy = null,
 //        $limit = null,
 //        $offset = null
-    );
+    ) {
+
+        // if (! $query instanceof QueryBuilder)
+        $query = $this->getSelectionQuery(
+            new QueryBuilder($this->getConnection())
+        );
+
+        foreach ($criteria as $condition) {
+            switch ($condition['operator']) {
+                case 'IN':
+                    $values = is_array($condition['value']) ? $condition['value'] : array($condition['value']);
+
+                    foreach ($values as &$value) {
+                        $value = $this->getConnection()->quote($value, \PDO::PARAM_STR);
+                    }
+
+                    // Should be able to use params .. but does not works ....
+//                    $query->andWhere(sprintf("%s IN ( :%s )", $condition['field'], $condition['field']))
+//                        ->setValue(':'.$condition['field'], implode(',', $values));
+
+                    $query->andWhere(sprintf("%s IN (%s)", $condition['field'], implode(',', $values)));
+
+                    break;
+
+                default:
+                    // do nothing;
+            }
+        }
+
+        return $query;
+    }
 
     /**
      * @return string
      */
     protected function getDbName()
     {
-        return $this->dbName;
+        return $this->getConnection()->getDatabase();
     }
+
+    /**
+     * @return string
+     */
+    protected function getTableFullName($tableName)
+    {
+        return sprintf("%s.%s", $this->getDbName(), $tableName);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @return QueryBuilder
+     */
+    abstract protected function getSelectionQuery(QueryBuilder $query);
 }

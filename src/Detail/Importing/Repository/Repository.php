@@ -20,16 +20,16 @@ class Repository implements
     /**
      * @var object
      */
-    protected $dtoEntityName;
+    protected $objectName;
 
     /**
      * @param Source\SourceInterface $source
-     * @param string $dtoEntityName DTO entity full class name
+     * @param string $objectName DTO entity full class name
      */
-    public function __construct(Source\SourceInterface $source, $dtoEntityName)
+    public function __construct(Source\SourceInterface $source, $objectName)
     {
         $this->source = $source;
-        $this->dtoEntityName = $dtoEntityName;
+        $this->objectName = $objectName;
     }
 
     /**
@@ -56,11 +56,12 @@ class Repository implements
      */
     protected function denormalizeRows(array $rows)
     {
-        // array_walk($rows, $this->getNormalizer()->denormalize, $this->dtoEntityName);
-        foreach ($rows as &$row) {
-            $row = $this->getNormalizer()->denormalize($row, $this->dtoEntityName);
+        $result = array();
+
+        foreach ($rows as $row) {
+            $result[] = $this->getNormalizer()->denormalize($row, $this->objectName);
         }
 
-        return $rows;
+        return $result;
     }
 }
