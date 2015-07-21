@@ -2,11 +2,12 @@
 
 namespace Detail\Importing\Repository;
 
-use Detail\Importing\Source;
 use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
 use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
 
-class Repository implements
+use Detail\Importing\Source;
+
+abstract class BaseRepository implements
     RepositoryInterface,
     NormalizerAwareInterface
 {
@@ -18,28 +19,18 @@ class Repository implements
     protected $source;
 
     /**
-     * @var object
+     * @var string
      */
     protected $objectName;
 
     /**
      * @param Source\SourceInterface $source
-     * @param string $objectName DTO entity full class name
+     * @param string $objectName Full class name
      */
     public function __construct(Source\SourceInterface $source, $objectName)
     {
         $this->source = $source;
         $this->objectName = $objectName;
-    }
-
-    /**
-     * @return array
-     */
-    public function fetchAll()
-    {
-        $rows = $this->getSource()->fetchAll();
-
-        return $this->denormalizeRows($rows);
     }
 
     /**
@@ -51,6 +42,14 @@ class Repository implements
     }
 
     /**
+     * @return string
+     */
+    protected function getObjectName()
+    {
+        return $this->objectName;
+    }
+
+    /**
      * @param array $rows
      * @return array
      */
@@ -59,7 +58,7 @@ class Repository implements
         $result = array();
 
         foreach ($rows as $row) {
-            $result[] = $this->getNormalizer()->denormalize($row, $this->objectName);
+            $result[] = $this->getNormalizer()->denormalize($row, $this->getObjectName());
         }
 
         return $result;
