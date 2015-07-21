@@ -27,11 +27,12 @@
         "squizlabs/php_codesniffer" : "~2.3",
         "phpmd/phpmd": "~2.2",
         "satooshi/php-coveralls": "dev-master",
-        "doctrine/dbal": "~2.4"
+        "doctrine/dbal": "~2.4",
+        "detailnet/dfw-normalization": "~0.1"
     },
     "suggest": {
         "doctrine/dbal": "For usage of the Doctrine DBAL based source",
-        "detailnet/dfw-normalization": "For usage of Repository"
+        "detailnet/dfw-normalization": "For usage of the Repository class"
     },
     "autoload": {
         "psr-0": {
