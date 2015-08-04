@@ -29,7 +29,9 @@ class RepositoryBasedProvider implements
      */
     public function __construct(RepositoryInterface $repository, $accessor, array $arguments = array())
     {
-        $this->setRepository($repository);
+        $this->repository = $repository;
+        $this->accessor = (string) $accessor;
+        $this->arguments = $arguments;
     }
 
     /**
@@ -41,14 +43,6 @@ class RepositoryBasedProvider implements
     }
 
     /**
-     * @param RepositoryInterface $repository
-     */
-    public function setRepository(RepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
-
-    /**
      * @return string
      */
     public function getAccessor()
@@ -57,27 +51,11 @@ class RepositoryBasedProvider implements
     }
 
     /**
-     * @param string $accessor
-     */
-    public function setAccessor($accessor)
-    {
-        $this->accessor = $accessor;
-    }
-
-    /**
      * @return array
      */
     public function getArguments()
     {
         return $this->arguments;
-    }
-
-    /**
-     * @param array $arguments
-     */
-    public function setArguments(array $arguments)
-    {
-        $this->arguments = $arguments;
     }
 
     /**
