@@ -14,31 +14,16 @@ abstract class BaseRepository implements
     use NormalizerAwareTrait;
 
     /**
-     * @var Source\SourceInterface
-     */
-    protected $source;
-
-    /**
      * @var string
      */
     protected $objectName;
 
     /**
-     * @param Source\SourceInterface $source
      * @param string $objectName Full class name
      */
-    public function __construct(Source\SourceInterface $source, $objectName)
+    public function __construct($objectName)
     {
-        $this->source = $source;
         $this->objectName = $objectName;
-    }
-
-    /**
-     * @return Source\SourceInterface
-     */
-    protected function getSource()
-    {
-        return $this->source;
     }
 
     /**
