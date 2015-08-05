@@ -2,7 +2,7 @@
 
 namespace Detail\Importing\Runner;
 
-abstract class BaseRunner implements
+abstract class DataProviderBasedRunner implements
     RunnerInterface
 {
     /**
