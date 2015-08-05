@@ -73,9 +73,9 @@ abstract class DataProviderBasedRunner implements
 
     /**
      * @param Processor\ProcessorInterface $processor
-     * @param array $row
+     * @param array|object $row
      */
-    protected function processRow(Processor\ProcessorInterface $processor, array $row)
+    protected function processRow(Processor\ProcessorInterface $processor, $row)
     {
         $processor->process($row);
     }
