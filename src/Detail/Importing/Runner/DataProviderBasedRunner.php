@@ -2,7 +2,7 @@
 
 namespace Detail\Importing\Runner;
 
-abstract class DataProviderBasedRunner implements
+class DataProviderBasedRunner implements
     RunnerInterface
 {
     /**
@@ -11,11 +11,28 @@ abstract class DataProviderBasedRunner implements
     protected $dataProvider;
 
     /**
-     * @param DataProvider\ProviderInterface $dataProvider
+     * @var array
      */
-    public function __construct(DataProvider\ProviderInterface $dataProvider)
-    {
+    protected $rowsetProcessors = array();
+
+    /**
+     * @var array
+     */
+    protected $rowProcessors = array();
+
+    /**
+     * @param DataProvider\ProviderInterface $dataProvider
+     * @param array $rowsetProcessors
+     * @param array $rowProcessors
+     */
+    public function __construct(
+        DataProvider\ProviderInterface $dataProvider,
+        array $rowsetProcessors = array(),
+        array $rowProcessors = array()
+    ) {
         $this->setDataProvider($dataProvider);
+        $this->setRowsetProcessors($rowsetProcessors);
+        $this->setRowProcessors($rowProcessors);
     }
 
     /**
@@ -35,14 +52,36 @@ abstract class DataProviderBasedRunner implements
     }
 
     /**
-     * @return Processor\ProcessorInterface[]
+     * @return array
      */
-    abstract public function getRowsetProcessors();
+    public function getRowsetProcessors()
+    {
+        return $this->rowsetProcessors;
+    }
 
     /**
-     * @return Processor\ProcessorInterface[]
+     * @param array $rowsetProcessors
      */
-    abstract public function getRowProcessors();
+    public function setRowsetProcessors(array $rowsetProcessors)
+    {
+        $this->rowsetProcessors = $rowsetProcessors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRowProcessors()
+    {
+        return $this->rowProcessors;
+    }
+
+    /**
+     * @param array $rowProcessors
+     */
+    public function setRowProcessors(array $rowProcessors)
+    {
+        $this->rowProcessors = $rowProcessors;
+    }
 
     /**
      * @param array $options
