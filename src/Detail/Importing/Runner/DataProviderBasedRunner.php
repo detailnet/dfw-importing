@@ -52,7 +52,7 @@ class DataProviderBasedRunner implements
     }
 
     /**
-     * @return array
+     * @return Processor\ProcessorInterface[]
      */
     public function getRowsetProcessors()
     {
@@ -60,7 +60,7 @@ class DataProviderBasedRunner implements
     }
 
     /**
-     * @param array $rowsetProcessors
+     * @param Processor\ProcessorInterface[] $rowsetProcessors
      */
     public function setRowsetProcessors(array $rowsetProcessors)
     {
@@ -68,7 +68,7 @@ class DataProviderBasedRunner implements
     }
 
     /**
-     * @return array
+     * @return Processor\ProcessorInterface[]
      */
     public function getRowProcessors()
     {
@@ -76,11 +76,19 @@ class DataProviderBasedRunner implements
     }
 
     /**
-     * @param array $rowProcessors
+     * @param Processor\ProcessorInterface[] $rowProcessors
      */
     public function setRowProcessors(array $rowProcessors)
     {
         $this->rowProcessors = $rowProcessors;
+    }
+
+    /**
+     * @return Processor\ProcessorInterface[]
+     */
+    public function getProcessors()
+    {
+        return array_merge($this->getRowsetProcessors(), $this->getRowProcessors());
     }
 
     /**
