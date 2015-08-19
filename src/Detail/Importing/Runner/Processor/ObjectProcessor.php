@@ -57,4 +57,15 @@ abstract class ObjectProcessor implements
             );
         }
     }
+
+    /**
+     * @param array $options
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    protected function getOption(array $options, $name, $default = null)
+    {
+        return array_key_exists($name, $options) ? $options[$name] : $default;
+    }
 }
