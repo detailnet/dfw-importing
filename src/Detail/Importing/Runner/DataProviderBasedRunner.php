@@ -6,6 +6,7 @@ class DataProviderBasedRunner implements
     RunnerInterface
 {
     const RUN_OPTION_PROVIDER_ARGUMENTS = 'provider_arguments';
+    const RUN_OPTION_PROCESSOR_OPTIONS = 'processor_options';
 
     /**
      * @var DataProvider\ProviderInterface
@@ -102,13 +103,15 @@ class DataProviderBasedRunner implements
             $this->getOption($options, self::RUN_OPTION_PROVIDER_ARGUMENTS)
         );
 
+        $processorOptions = $this->getOption($options, self::RUN_OPTION_PROCESSOR_OPTIONS, array());
+
         foreach ($this->getRowsetProcessors() as $processor) {
-            $this->processRowset($processor, $rows);
+            $this->processRowset($processor, $rows, $processorOptions);
         }
 
         foreach ($this->getRowProcessors() as $processor) {
             foreach ($rows as $row) {
-                $this->processRow($processor, $row);
+                $this->processRow($processor, $row, $processorOptions);
             }
         }
     }
@@ -116,19 +119,21 @@ class DataProviderBasedRunner implements
     /**
      * @param Processor\ProcessorInterface $processor
      * @param array $rows
+     * @param array $options
      */
-    protected function processRowset(Processor\ProcessorInterface $processor, array $rows)
+    protected function processRowset(Processor\ProcessorInterface $processor, array $rows, array $options = array())
     {
-        $processor->process($rows);
+        $processor->process($rows, $options);
     }
 
     /**
      * @param Processor\ProcessorInterface $processor
      * @param array|object $row
+     * @param array $options
      */
-    protected function processRow(Processor\ProcessorInterface $processor, $row)
+    protected function processRow(Processor\ProcessorInterface $processor, $row, array $options = array())
     {
-        $processor->process($row);
+        $processor->process($row, $options);
     }
 
     /**
