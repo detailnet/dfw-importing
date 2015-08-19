@@ -59,16 +59,21 @@ class RepositoryBasedProvider implements
     }
 
     /**
+     * @param array $arguments
      * @return array
      */
-    public function getRows()
+    public function getRows(array $arguments = null)
     {
         $repository = $this->getRepository();
         $accessor = $this->getAccessor();
 
         /** @todo Check if accessor can be called */
 
-        $rows = call_user_func_array(array($repository, $accessor), $this->getArguments());
+        // Use runtime arguments if provided, otherwise use default arguments
+        $rows = call_user_func_array(
+            array($repository, $accessor),
+            $arguments ?: $this->getArguments()
+        );
 
         /** @todo Error handling */
 

@@ -5,6 +5,8 @@ namespace Detail\Importing\Runner;
 class DataProviderBasedRunner implements
     RunnerInterface
 {
+    const RUN_OPTION_PROVIDER_ARGUMENTS = 'provider_arguments';
+
     /**
      * @var DataProvider\ProviderInterface
      */
@@ -96,7 +98,9 @@ class DataProviderBasedRunner implements
      */
     public function run(array $options = array())
     {
-        $rows = $this->getDataProvider()->getRows();
+        $rows = $this->getDataProvider()->getRows(
+            $this->getOption($options, self::RUN_OPTION_PROVIDER_ARGUMENTS)
+        );
 
         foreach ($this->getRowsetProcessors() as $processor) {
             $this->processRowset($processor, $rows);
@@ -125,5 +129,16 @@ class DataProviderBasedRunner implements
     protected function processRow(Processor\ProcessorInterface $processor, $row)
     {
         $processor->process($row);
+    }
+
+    /**
+     * @param array $options
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    protected function getOption(array $options, $name, $default = null)
+    {
+        return array_key_exists($name, $options) ? $options[$name] : $default;
     }
 }
