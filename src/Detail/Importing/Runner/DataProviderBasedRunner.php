@@ -24,18 +24,26 @@ class DataProviderBasedRunner implements
     protected $rowProcessors = array();
 
     /**
+     * @var array
+     */
+    protected $processorOptions = array();
+
+    /**
      * @param DataProvider\ProviderInterface $dataProvider
      * @param array $rowsetProcessors
      * @param array $rowProcessors
+     * @param array $processorOptions
      */
     public function __construct(
         DataProvider\ProviderInterface $dataProvider,
         array $rowsetProcessors = array(),
-        array $rowProcessors = array()
+        array $rowProcessors = array(),
+        array $processorOptions = array()
     ) {
         $this->setDataProvider($dataProvider);
         $this->setRowsetProcessors($rowsetProcessors);
         $this->setRowProcessors($rowProcessors);
+        $this->setProcessorOptions($processorOptions);
     }
 
     /**
@@ -87,6 +95,22 @@ class DataProviderBasedRunner implements
     }
 
     /**
+     * @return array
+     */
+    public function getProcessorOptions()
+    {
+        return $this->processorOptions;
+    }
+
+    /**
+     * @param array $processorOptions
+     */
+    public function setProcessorOptions(array $processorOptions)
+    {
+        $this->processorOptions = $processorOptions;
+    }
+
+    /**
      * @return Processor\ProcessorInterface[]
      */
     public function getProcessors()
@@ -103,7 +127,10 @@ class DataProviderBasedRunner implements
             $this->getOption($options, self::RUN_OPTION_PROVIDER_ARGUMENTS)
         );
 
-        $processorOptions = $this->getOption($options, self::RUN_OPTION_PROCESSOR_OPTIONS, array());
+        $processorOptions = array_merge_recursive(
+            $this->getProcessorOptions(),
+            $this->getOption($options, self::RUN_OPTION_PROCESSOR_OPTIONS, array())
+        );
 
         foreach ($this->getRowsetProcessors() as $processor) {
             $this->processRowset($processor, $rows, $processorOptions);
