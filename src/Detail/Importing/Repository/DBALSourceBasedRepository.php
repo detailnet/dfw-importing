@@ -61,7 +61,14 @@ class DBALSourceBasedRepository extends SourceBasedRepository
      */
     protected function executeSelectQuery(QueryBuilder $query)
     {
-        $rows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $rows = array();
+        $statement = $query->execute();
+
+        /** @todo Should configure which fetch method to use (fetch row by row or fetchAll) */
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) {
+            $this->processRow($row, $rows);
+        }
+
         $rows = $this->processRows($rows);
 
         return $this->denormalizeRows($rows);
@@ -89,10 +96,25 @@ class DBALSourceBasedRepository extends SourceBasedRepository
     }
 
     /**
+     * Process single row.
+     *
+     * Possible use case is to lower memory footprint when using data aggregation.
+     * After data manipulation the row has to be added in the rows array passed as pointer.
+     *
+     * @param array $row
+     * @param array &$rows
+     * @return array
+     */
+    protected function processRow(array $row, array &$rows)
+    {
+        $rows[] = $row;
+    }
+
+    /**
      * @param array $rows
      * @return array
      */
-    protected function processRows(array $rows)
+    protected function processRows(array $rows) /** @todo Should pass $rows as pointer */
     {
         return $rows;
     }
