@@ -9,7 +9,7 @@ abstract class ObjectRowProcessor extends ObjectProcessor
      * @param array $options
      * @return void
      */
-    public function process($data, array $options = array())
+    public function process($data, array $options = [])
     {
         $this->verifyRow($data);
         $this->processRow($data, $options);
@@ -20,5 +20,5 @@ abstract class ObjectRowProcessor extends ObjectProcessor
      * @param array $options
      * @return void
      */
-    abstract protected function processRow($row, array $options = array());
+    abstract protected function processRow($row, array $options = []);
 }

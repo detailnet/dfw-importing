@@ -61,7 +61,7 @@ class DBALSourceBasedRepository extends SourceBasedRepository
      */
     protected function executeSelectQuery(QueryBuilder $query)
     {
-        $rows = array();
+        $rows = [];
         $statement = $query->execute();
 
         /** @todo Should configure which fetch method to use (fetch row by row or fetchAll) */
@@ -103,7 +103,6 @@ class DBALSourceBasedRepository extends SourceBasedRepository
      *
      * @param array $row
      * @param array &$rows
-     * @return array
      */
     protected function processRow(array $row, array &$rows)
     {

@@ -27,7 +27,7 @@ class RepositoryBasedProvider implements
      * @param string $accessor
      * @param array $arguments
      */
-    public function __construct(RepositoryInterface $repository, $accessor, array $arguments = array())
+    public function __construct(RepositoryInterface $repository, $accessor, array $arguments = [])
     {
         $this->repository = $repository;
         $this->accessor = (string) $accessor;
@@ -71,7 +71,7 @@ class RepositoryBasedProvider implements
 
         // Use runtime arguments if provided, otherwise use default arguments
         $rows = call_user_func_array(
-            array($repository, $accessor),
+            [$repository, $accessor],
             $arguments ?: $this->getArguments()
         );
 

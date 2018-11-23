@@ -2,10 +2,8 @@
 
 namespace Detail\Importing\Repository;
 
-use Detail\Normalization\Normalizer\Service\NormalizerAwareInterface;
-use Detail\Normalization\Normalizer\Service\NormalizerAwareTrait;
-
-use Detail\Importing\Source;
+use Detail\Normalization\Normalizer\NormalizerAwareInterface;
+use Detail\Normalization\Normalizer\NormalizerAwareTrait;
 
 abstract class BaseRepository implements
     RepositoryInterface,
@@ -40,7 +38,7 @@ abstract class BaseRepository implements
      */
     protected function denormalizeRows(array $rows)
     {
-        $result = array();
+        $result = [];
 
         foreach ($rows as $row) {
             $result[] = $this->getNormalizer()->denormalize($row, $this->getObjectName());

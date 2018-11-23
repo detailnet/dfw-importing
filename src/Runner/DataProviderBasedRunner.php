@@ -16,17 +16,17 @@ class DataProviderBasedRunner implements
     /**
      * @var array
      */
-    protected $rowsetProcessors = array();
+    protected $rowsetProcessors = [];
 
     /**
      * @var array
      */
-    protected $rowProcessors = array();
+    protected $rowProcessors = [];
 
     /**
      * @var array
      */
-    protected $processorOptions = array();
+    protected $processorOptions = [];
 
     /**
      * @param DataProvider\ProviderInterface $dataProvider
@@ -36,9 +36,9 @@ class DataProviderBasedRunner implements
      */
     public function __construct(
         DataProvider\ProviderInterface $dataProvider,
-        array $rowsetProcessors = array(),
-        array $rowProcessors = array(),
-        array $processorOptions = array()
+        array $rowsetProcessors = [],
+        array $rowProcessors = [],
+        array $processorOptions = []
     ) {
         $this->setDataProvider($dataProvider);
         $this->setRowsetProcessors($rowsetProcessors);
@@ -121,7 +121,7 @@ class DataProviderBasedRunner implements
     /**
      * @param array $options
      */
-    public function run(array $options = array())
+    public function run(array $options = [])
     {
         $rows = $this->getDataProvider()->getRows(
             $this->getOption($options, self::RUN_OPTION_PROVIDER_ARGUMENTS)
@@ -129,7 +129,7 @@ class DataProviderBasedRunner implements
 
         $processorOptions = array_merge_recursive(
             $this->getProcessorOptions(),
-            $this->getOption($options, self::RUN_OPTION_PROCESSOR_OPTIONS, array())
+            $this->getOption($options, self::RUN_OPTION_PROCESSOR_OPTIONS, [])
         );
 
         foreach ($this->getRowsetProcessors() as $processor) {
@@ -148,7 +148,7 @@ class DataProviderBasedRunner implements
      * @param array $rows
      * @param array $options
      */
-    protected function processRowset(Processor\ProcessorInterface $processor, array $rows, array $options = array())
+    protected function processRowset(Processor\ProcessorInterface $processor, array $rows, array $options = [])
     {
         $processor->process($rows, $options);
     }
@@ -158,7 +158,7 @@ class DataProviderBasedRunner implements
      * @param array|object $row
      * @param array $options
      */
-    protected function processRow(Processor\ProcessorInterface $processor, $row, array $options = array())
+    protected function processRow(Processor\ProcessorInterface $processor, $row, array $options = [])
     {
         $processor->process($row, $options);
     }

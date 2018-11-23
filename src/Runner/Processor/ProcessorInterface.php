@@ -9,5 +9,5 @@ interface ProcessorInterface
      * @param array $options
      * @return void
      */
-    public function process($data, array $options = array());
+    public function process($data, array $options = []);
 }

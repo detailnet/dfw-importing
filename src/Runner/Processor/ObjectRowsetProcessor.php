@@ -11,7 +11,7 @@ abstract class ObjectRowsetProcessor extends ObjectProcessor
      * @param array $options
      * @return void
      */
-    public function process($data, array $options = array())
+    public function process($data, array $options = [])
     {
         if (!is_array($data)) {
             throw new Exception\InvalidArgumentException(
@@ -31,5 +31,5 @@ abstract class ObjectRowsetProcessor extends ObjectProcessor
      * @param array $options
      * @return void
      */
-    abstract protected function processRowset($rows, array $options = array());
+    abstract protected function processRowset($rows, array $options = []);
 }

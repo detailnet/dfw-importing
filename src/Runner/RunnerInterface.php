@@ -8,5 +8,5 @@ interface RunnerInterface
      * @param array $options
      * @return void
      */
-    public function run(array $options = array());
+    public function run(array $options = []);
 }
