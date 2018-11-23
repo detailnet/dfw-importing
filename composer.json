@@ -58,5 +58,6 @@
         "test": "phpunit",
         "test-coverage-html": "phpunit --coverage-html build/coverage",
         "test-coverage-clover": "phpunit --coverage-clover build/clover.xml"
-    }
+    },
+    "abandoned": true
 }
